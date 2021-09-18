@@ -1,0 +1,7 @@
+example
+dist
+.idea
+tests/outfiles
+__pycache__
+bin/build.env
+data
