@@ -30,10 +30,16 @@ print('Please wait...')
 domain_info = []
 
 for domain in domains_to_check:
+
+    try:
     cert = ssl.get_server_certificate((domain, 443))
-    x509 = OpenSSL.crypto.load_certificate(OpenSSL.crypto.FILETYPE_PEM, cert)
-    expiry_time = datetime.strptime(x509.get_notAfter().decode('ascii'), '%Y%m%d%H%M%SZ')
+        x509 = OpenSSL.crypto.load_certificate(
+            OpenSSL.crypto.FILETYPE_PEM, cert)
+        expiry_time = datetime.strptime(
+            x509.get_notAfter().decode('ascii'), '%Y%m%d%H%M%SZ')
     domain_info.append({'domain': domain, 'expiry_time': expiry_time})
+    except Exception as exc:
+        print(f'Error when validating domain {domain}: {exc}')
 
 domain_info_sorted = list(sorted(domain_info, key=lambda item: item['expiry_time']))
 
